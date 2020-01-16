@@ -1,3 +1,5 @@
+import { easeInOut } from './util';
+
 const SIDE = 50;
 const HEIGHT = Math.sqrt(3) * SIDE;
 const WIDTH = 2 * SIDE;
@@ -28,18 +30,19 @@ export default class Controller {
 	render(context) {
 		const animState = Math.floor(this.animAmt * 2);
 		const animAmt = (this.animAmt * 2) % 1;
+		const adjustedAnimAmt = easeInOut(animAmt, 3);
 
 		if (animState == 0) {
 			context.fillStyle = 'white';
 			context.fillRect(-CANVAS_SIZE, -CANVAS_SIZE, 2 * CANVAS_SIZE, 2 * CANVAS_SIZE);
 			context.fillStyle = 'black';
-			this.renderHexes(context, animAmt);
+			this.renderHexes(context, adjustedAnimAmt);
 		}
 		else {
 			context.fillStyle = 'black';
 			context.fillRect(-CANVAS_SIZE, -CANVAS_SIZE, 2 * CANVAS_SIZE, 2 * CANVAS_SIZE);
 			context.fillStyle = 'white';
-			this.renderStars(context, animAmt);
+			this.renderStars(context, adjustedAnimAmt);
 		}
 	}
 
