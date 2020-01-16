@@ -28,7 +28,7 @@ export default class Controller {
 		context.fillStyle = 'black';
 		this.renderHexes(context);
 		context.fillStyle = 'white';
-		this.renderStar(context, {x: 0, y: 0});
+		this.renderStars(context);
 	}
 
 	/**
@@ -79,6 +79,22 @@ export default class Controller {
 		}
 		context.closePath();
 		context.fill();
+	}
+
+	renderStars(context) {
+		const halfLayers = 3;
+		for (let y = -halfLayers; y <= halfLayers; y++) {
+			for (let x = -halfLayers; x <= halfLayers; x++) {
+				var adjustedX = y % 2 == 0 ? x : x + 0.5;
+				this.renderStar(
+					context,
+					{
+						x: 3 * WIDTH * adjustedX,
+						y: HEIGHT * y
+					}
+				);
+			}
+		}
 	}
 
 	renderStar(context, center) {
