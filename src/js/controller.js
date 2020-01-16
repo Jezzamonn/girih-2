@@ -25,7 +25,10 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
+		context.fillStyle = 'black';
 		this.renderHexes(context);
+		context.fillStyle = 'white';
+		this.renderStar(context, {x: 0, y: 0});
 	}
 
 	/**
@@ -67,6 +70,25 @@ export default class Controller {
 			const angle = 2 * Math.PI * amt;
 			const x = center.x + SIDE * Math.cos(angle);
 			const y = center.y + SIDE * Math.sin(angle);
+			if (i == 0) {
+				context.moveTo(x, y);
+			}
+			else {
+				context.lineTo(x, y);
+			}
+		}
+		context.closePath();
+		context.fill();
+	}
+
+	renderStar(context, center) {
+		context.beginPath();
+		for (let i = 0; i < 12; i++) {
+			const amt = i / 12;
+			const angle = 2 * Math.PI * amt;
+			const radius = i % 2 == 0 ? SIDE : Math.sqrt(3) * SIDE;
+			const x = center.x + radius * Math.cos(angle);
+			const y = center.y + radius * Math.sin(angle);
 			if (i == 0) {
 				context.moveTo(x, y);
 			}
