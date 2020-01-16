@@ -6,7 +6,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 9;
+		this.period = 3;
 	}
 
 	/**
@@ -35,7 +35,17 @@ export default class Controller {
 		const halfLayers = 5;
 		for (let y = -halfLayers; y <= halfLayers; y++) {
 			for (let x = -halfLayers; x <= halfLayers; x++) {
-				var adjustedX = y % 2 == 0 ? x + 0.5 : x;
+				var adjustedX = y % 2 == 0 ? x : x + 0.5;
+				if (y % 2 == 0) {
+					if (x % 3 == 0) {
+						continue;
+					}
+				}
+				else {
+					if ((x + 2) % 3 == 0) {
+						continue;
+					}
+				}
 				this.renderHex(
 					context,
 					{
