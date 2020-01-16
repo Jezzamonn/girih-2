@@ -1,6 +1,6 @@
 const SIDE = 20;
-const HEIGHT = 2 * SIDE;
-const WIDTH = Math.sqrt(3) * SIDE;
+const HEIGHT = Math.sqrt(3) * SIDE;
+const WIDTH = 2 * SIDE;
 
 export default class Controller {
 
@@ -25,7 +25,26 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		this.renderHex(context, {x: 0, y: 0});
+		this.renderHexes(context);
+	}
+
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
+	renderHexes(context) {
+		const halfLayers = 5;
+		for (let y = -halfLayers; y <= halfLayers; y++) {
+			for (let x = -halfLayers; x <= halfLayers; x++) {
+				var adjustedX = y % 2 == 0 ? x + 0.5 : x;
+				this.renderHex(
+					context,
+					{
+						x: WIDTH * adjustedX,
+						y: HEIGHT * y
+					}
+				);
+			}
+		}
 	}
 
 	/**
