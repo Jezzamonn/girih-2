@@ -31,14 +31,14 @@ export default class Controller {
 		const animState = Math.floor(this.animAmt * 2);
 		const animAmt = (this.animAmt * 2) % 1;
 
-		const splodeAmt = easeInOut(loop(animAmt), 3); 
-		const rotateAmt = 2 * easeInOut(animAmt, 2);
+		const splodeAmt = easeInOut(loop(animAmt), 4); 
+		const rotateAmt = easeInOut(animAmt, 3);
 
 		if (animState == 0) {
 			context.fillStyle = 'white';
 			context.fillRect(-CANVAS_SIZE, -CANVAS_SIZE, 2 * CANVAS_SIZE, 2 * CANVAS_SIZE);
 			context.fillStyle = 'black';
-			this.renderHexes(context, splodeAmt, rotateAmt);
+			this.renderHexes(context, splodeAmt, 2 * rotateAmt);
 		}
 		else {
 			context.fillStyle = 'black';
@@ -101,7 +101,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	renderHex(context, center, splodeAmt, rotation) {
-		const splode = slurp(1, 1.5, splodeAmt);
+		const splode = slurp(1, 1.2, splodeAmt);
 		context.save();
 		context.translate(splode * center.x, splode * center.y);
 		context.rotate(rotation);
@@ -124,7 +124,7 @@ export default class Controller {
 	}
 
 	renderStar(context, center, splodeAmt, rotation) {
-		const splode = slurp(1, 1.5, splodeAmt);
+		const splode = slurp(1, 1.2, splodeAmt);
 		context.save();
 		context.translate(splode * center.x, splode * center.y);
 		context.rotate(rotation);
