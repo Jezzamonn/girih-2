@@ -1,6 +1,6 @@
 import { easeInOut, slurp, loop } from './util';
 
-const SIDE = 50;
+const SIDE = 35;
 const HEIGHT = Math.sqrt(3) * SIDE;
 const WIDTH = 2 * SIDE;
 const CANVAS_SIZE = 500 * 2;
@@ -80,7 +80,7 @@ export default class Controller {
 	}
 
 	renderStars(context, splodeAmt, rotateAmt) {
-		const halfLayers = 3;
+		const halfLayers = 5;
 		for (let y = -halfLayers; y <= halfLayers; y++) {
 			for (let x = -halfLayers; x <= halfLayers; x++) {
 				var adjustedX = y % 2 == 0 ? x : x + 0.5;
