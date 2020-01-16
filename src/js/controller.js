@@ -9,7 +9,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 3;
+		this.period = 4;
 	}
 
 	/**
