@@ -1,4 +1,4 @@
-import { easeInOut } from './util';
+import { easeInOut, slurp, loop } from './util';
 
 const SIDE = 50;
 const HEIGHT = Math.sqrt(3) * SIDE;
@@ -9,7 +9,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 4;
+		this.period = 10;
 	}
 
 	/**
@@ -30,26 +30,28 @@ export default class Controller {
 	render(context) {
 		const animState = Math.floor(this.animAmt * 2);
 		const animAmt = (this.animAmt * 2) % 1;
-		const adjustedAnimAmt = easeInOut(animAmt, 3);
+
+		const splodeAmt = easeInOut(loop(animAmt), 3); 
+		const rotateAmt = 2 * easeInOut(animAmt, 2);
 
 		if (animState == 0) {
 			context.fillStyle = 'white';
 			context.fillRect(-CANVAS_SIZE, -CANVAS_SIZE, 2 * CANVAS_SIZE, 2 * CANVAS_SIZE);
 			context.fillStyle = 'black';
-			this.renderHexes(context, adjustedAnimAmt);
+			this.renderHexes(context, splodeAmt, rotateAmt);
 		}
 		else {
 			context.fillStyle = 'black';
 			context.fillRect(-CANVAS_SIZE, -CANVAS_SIZE, 2 * CANVAS_SIZE, 2 * CANVAS_SIZE);
 			context.fillStyle = 'white';
-			this.renderStars(context, adjustedAnimAmt);
+			this.renderStars(context, splodeAmt, rotateAmt);
 		}
 	}
 
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderHexes(context, animAmt) {
+	renderHexes(context, splodeAmt, rotateAmt) {
 		const halfLayers = 5;
 		for (let y = -halfLayers; y <= halfLayers; y++) {
 			for (let x = -halfLayers; x <= halfLayers; x++) {
@@ -70,13 +72,14 @@ export default class Controller {
 						x: WIDTH * adjustedX,
 						y: HEIGHT * y
 					},
-					2 * Math.PI * animAmt / 6
+					splodeAmt,
+					2 * Math.PI * rotateAmt / 6
 				);
 			}
 		}
 	}
 
-	renderStars(context, animAmt) {
+	renderStars(context, splodeAmt, rotateAmt) {
 		const halfLayers = 3;
 		for (let y = -halfLayers; y <= halfLayers; y++) {
 			for (let x = -halfLayers; x <= halfLayers; x++) {
@@ -87,7 +90,8 @@ export default class Controller {
 						x: 3 * WIDTH * adjustedX,
 						y: HEIGHT * y
 					},
-					-2 * Math.PI * animAmt / 6
+					splodeAmt,
+					-2 * Math.PI * rotateAmt / 6
 				);
 			}
 		}
@@ -96,9 +100,10 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderHex(context, center, rotation) {
+	renderHex(context, center, splodeAmt, rotation) {
+		const splode = slurp(1, 1.5, splodeAmt);
 		context.save();
-		context.translate(center.x, center.y);
+		context.translate(splode * center.x, splode * center.y);
 		context.rotate(rotation);
 		context.beginPath();
 		for (let i = 0; i < 6; i++) {
@@ -118,9 +123,10 @@ export default class Controller {
 		context.restore();
 	}
 
-	renderStar(context, center, rotation) {
+	renderStar(context, center, splodeAmt, rotation) {
+		const splode = slurp(1, 1.5, splodeAmt);
 		context.save();
-		context.translate(center.x, center.y);
+		context.translate(splode * center.x, splode * center.y);
 		context.rotate(rotation);
 		context.beginPath();
 		for (let i = 0; i < 12; i++) {
