@@ -1,4 +1,4 @@
-const SIDE = 20;
+const SIDE = 50;
 const HEIGHT = Math.sqrt(3) * SIDE;
 const WIDTH = 2 * SIDE;
 
