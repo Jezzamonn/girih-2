@@ -1,6 +1,7 @@
 const SIDE = 50;
 const HEIGHT = Math.sqrt(3) * SIDE;
 const WIDTH = 2 * SIDE;
+const CANVAS_SIZE = 500 * 2;
 
 export default class Controller {
 
@@ -25,16 +26,27 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		context.fillStyle = 'black';
-		this.renderHexes(context);
-		context.fillStyle = 'white';
-		this.renderStars(context);
+		const animState = Math.floor(this.animAmt * 2);
+		const animAmt = (this.animAmt * 2) % 1;
+
+		if (animState == 0) {
+			context.fillStyle = 'white';
+			context.fillRect(-CANVAS_SIZE, -CANVAS_SIZE, 2 * CANVAS_SIZE, 2 * CANVAS_SIZE);
+			context.fillStyle = 'black';
+			this.renderHexes(context, animAmt);
+		}
+		else {
+			context.fillStyle = 'black';
+			context.fillRect(-CANVAS_SIZE, -CANVAS_SIZE, 2 * CANVAS_SIZE, 2 * CANVAS_SIZE);
+			context.fillStyle = 'white';
+			this.renderStars(context, animAmt);
+		}
 	}
 
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	renderHexes(context) {
+	renderHexes(context, animAmt) {
 		const halfLayers = 5;
 		for (let y = -halfLayers; y <= halfLayers; y++) {
 			for (let x = -halfLayers; x <= halfLayers; x++) {
@@ -54,34 +66,14 @@ export default class Controller {
 					{
 						x: WIDTH * adjustedX,
 						y: HEIGHT * y
-					}
+					},
+					2 * Math.PI * animAmt / 6
 				);
 			}
 		}
 	}
 
-	/**
-	 * @param {!CanvasRenderingContext2D} context
-	 */
-	renderHex(context, center) {
-		context.beginPath();
-		for (let i = 0; i < 6; i++) {
-			const amt = i / 6;
-			const angle = 2 * Math.PI * amt;
-			const x = center.x + SIDE * Math.cos(angle);
-			const y = center.y + SIDE * Math.sin(angle);
-			if (i == 0) {
-				context.moveTo(x, y);
-			}
-			else {
-				context.lineTo(x, y);
-			}
-		}
-		context.closePath();
-		context.fill();
-	}
-
-	renderStars(context) {
+	renderStars(context, animAmt) {
 		const halfLayers = 3;
 		for (let y = -halfLayers; y <= halfLayers; y++) {
 			for (let x = -halfLayers; x <= halfLayers; x++) {
@@ -91,20 +83,26 @@ export default class Controller {
 					{
 						x: 3 * WIDTH * adjustedX,
 						y: HEIGHT * y
-					}
+					},
+					-2 * Math.PI * animAmt / 6
 				);
 			}
 		}
 	}
 
-	renderStar(context, center) {
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
+	renderHex(context, center, rotation) {
+		context.save();
+		context.translate(center.x, center.y);
+		context.rotate(rotation);
 		context.beginPath();
-		for (let i = 0; i < 12; i++) {
-			const amt = i / 12;
+		for (let i = 0; i < 6; i++) {
+			const amt = i / 6;
 			const angle = 2 * Math.PI * amt;
-			const radius = i % 2 == 0 ? SIDE : Math.sqrt(3) * SIDE;
-			const x = center.x + radius * Math.cos(angle);
-			const y = center.y + radius * Math.sin(angle);
+			const x = SIDE * Math.cos(angle);
+			const y = SIDE * Math.sin(angle);
 			if (i == 0) {
 				context.moveTo(x, y);
 			}
@@ -114,6 +112,30 @@ export default class Controller {
 		}
 		context.closePath();
 		context.fill();
+		context.restore();
+	}
+
+	renderStar(context, center, rotation) {
+		context.save();
+		context.translate(center.x, center.y);
+		context.rotate(rotation);
+		context.beginPath();
+		for (let i = 0; i < 12; i++) {
+			const amt = i / 12;
+			const angle = 2 * Math.PI * amt;
+			const radius = i % 2 == 0 ? SIDE : Math.sqrt(3) * SIDE;
+			const x = radius * Math.cos(angle);
+			const y = radius * Math.sin(angle);
+			if (i == 0) {
+				context.moveTo(x, y);
+			}
+			else {
+				context.lineTo(x, y);
+			}
+		}
+		context.closePath();
+		context.fill();
+		context.restore();
 	}
 
 }
