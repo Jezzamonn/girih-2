@@ -101,7 +101,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	renderHex(context, center, splodeAmt, rotation) {
-		const splode = slurp(1, 1.2, splodeAmt);
+		const splode = getSplode(center, splodeAmt)
 		context.save();
 		context.translate(splode * center.x, splode * center.y);
 		context.rotate(rotation);
@@ -124,7 +124,7 @@ export default class Controller {
 	}
 
 	renderStar(context, center, splodeAmt, rotation) {
-		const splode = slurp(1, 1.2, splodeAmt);
+		const splode = getSplode(center, splodeAmt)
 		context.save();
 		context.translate(splode * center.x, splode * center.y);
 		context.rotate(rotation);
@@ -147,4 +147,16 @@ export default class Controller {
 		context.restore();
 	}
 
+}
+
+function getSplode(center, splodeAmt) {
+	const dist = sqMagnitude(center);
+	const distAmt = 1 - dist / (500 * 500);
+	const adjustedSplodeAmt = Math.pow(splodeAmt, 1 * distAmt);
+	return slurp(1, 1.2, adjustedSplodeAmt);
+}
+
+
+function sqMagnitude(p) {
+	return p.x * p.x + p.y * p.y;
 }
